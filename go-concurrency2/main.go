@@ -21,6 +21,11 @@ func main() {
 		}(ch, i, wg)
 	}
 
+	// main thread has blocking code so cannot wait for the
+	// waitgroups to end there thats y spawn another routine to halt
+	// the main thread and upon ending the wait close the channel since
+	// the all the above routines are made Done() and channel is done sending
+	// data
 	go func() {
 		wg.Wait()
 		close(ch)
